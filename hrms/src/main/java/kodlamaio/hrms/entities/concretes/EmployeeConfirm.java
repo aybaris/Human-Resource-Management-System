@@ -1,5 +1,8 @@
 package kodlamaio.hrms.entities.concretes;
 
+
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,19 +14,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Entity
-@Table(name="job_titles")
-@AllArgsConstructor
 @NoArgsConstructor
-public class JobTitle {
-	
+@AllArgsConstructor
+@Table(name = "employee_confirms")
+public class EmployeeConfirm {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private int id;
 	
-	@Column(name="title")
-	private String title;
+	@Column(name = "employee_id")
+	private String employeeId;
 	
+	@Column(name = "is_confirmed")
+	private boolean isConfirmed;
+	
+	@Column(name = "confirm_date", columnDefinition = "Date Default CURRENT_DATE")
+	private Date confirmedDate;
 }

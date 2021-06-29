@@ -6,25 +6,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.JobTitleService;
+import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.ErrorResult;
+import kodlamaio.hrms.core.utilities.results.Result;
+import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
+import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.JobTitleDao;
 import kodlamaio.hrms.entities.concretes.JobTitle;
 
 @Service
 public class JobTitleManager implements JobTitleService{
-	
 	private JobTitleDao jobTitleDao;
-	
+
 	@Autowired
 	public JobTitleManager(JobTitleDao jobTitleDao) {
 		super();
 		this.jobTitleDao = jobTitleDao;
 	}
 
+	@Override
+	public DataResult<List<JobTitle>> getAll() {
+		
+		return new SuccessDataResult<List<JobTitle>>(this.jobTitleDao.findAll(), "İş pozisyonları listelendi.");
+	}
 
 	@Override
-	public List<JobTitle> getAll() {
-		// TODO Auto-generated method stub
-		return this.jobTitleDao.findAll();
+	public Result add(JobTitle jobTitle) {
+		
+		if(!CheckTitle(jobTitle.getTitle())) {
+			return new ErrorResult("Title tekrar edemez!");
+		}
+		
+		this.jobTitleDao.save(jobTitle);
+		return new SuccessResult("Pozisyon eklendi.");
+	}
+	
+	private boolean CheckTitle(String title) {
+		if(this.jobTitleDao.getByTitle(title) == null) {
+			return true;
+		}
+		return false;
 	}
 
 }
